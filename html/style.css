@@ -1,0 +1,185 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; background: transparent; color: #fff; }
+
+#inventory {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.inv-panel {
+    background: rgba(10, 10, 14, 0.75);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 20px;
+    width: 540px;
+    max-height: 80vh;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.inv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.inv-header h2 { font-size: 16px; font-weight: 600; }
+
+.weight-bar {
+    width: 180px;
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+.weight-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #84cc16, #a3e635);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+.weight-text {
+    position: absolute;
+    top: -18px;
+    right: 0;
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+}
+
+/* GRID */
+.inv-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.inv-slot {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+.inv-slot:hover { border-color: rgba(132,204,22,0.4); background: rgba(132,204,22,0.05); }
+.inv-slot.hotbar { border-color: rgba(132,204,22,0.2); }
+.inv-slot.hotbar::before {
+    content: attr(data-hotbar);
+    position: absolute;
+    top: 2px; left: 4px;
+    font-size: 9px;
+    color: #84cc16;
+    font-weight: 700;
+}
+
+.inv-slot.dragging { opacity: 0.4; border-color: #84cc16; }
+.inv-slot.drag-over { border-color: #84cc16; background: rgba(132,204,22,0.1); }
+
+.slot-content {
+    text-align: center;
+    pointer-events: none;
+}
+.slot-icon {
+    font-size: 24px;
+    margin-bottom: 2px;
+    pointer-events: none;
+}
+.slot-label {
+    font-size: 9px;
+    color: rgba(255,255,255,0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+    pointer-events: none;
+}
+.slot-amount {
+    position: absolute;
+    bottom: 2px; right: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    pointer-events: none;
+}
+.slot-weight {
+    position: absolute;
+    top: 2px; right: 4px;
+    font-size: 8px;
+    color: rgba(255,255,255,0.3);
+    pointer-events: none;
+}
+
+/* TOOLTIP */
+.tooltip {
+    position: fixed;
+    background: rgb(18, 18, 24);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px;
+    min-width: 180px;
+    z-index: 100;
+    pointer-events: auto;
+}
+.tooltip-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.tooltip-desc { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+.tooltip-weight { font-size: 10px; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+.tooltip-actions { display: flex; gap: 6px; }
+.tooltip-btn {
+    flex: 1;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: background 0.2s;
+    color: #fff;
+}
+.use-btn { background: rgba(132,204,22,0.3); }
+.use-btn:hover { background: rgba(132,204,22,0.5); }
+.drop-btn { background: rgba(239,68,68,0.2); }
+.drop-btn:hover { background: rgba(239,68,68,0.35); }
+
+/* Drag ghost */
+.drag-ghost {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    background: rgb(18, 18, 24);
+    border: 2px solid #84cc16;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.9;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+.drag-ghost .slot-icon { font-size: 24px; pointer-events: none; }
+.drag-ghost .slot-label { font-size: 9px; color: rgba(255,255,255,0.7); pointer-events: none; }
+
+/* Scrollbar - escondida */
+.inv-grid::-webkit-scrollbar { display: none; }
+.inv-grid { -ms-overflow-style: none; scrollbar-width: none; }

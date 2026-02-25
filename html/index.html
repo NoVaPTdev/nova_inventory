@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>NOVA Inventory</title>
+</head>
+<body>
+    <div id="inventory" style="display:none;">
+        <div class="inv-panel">
+            <div class="inv-header">
+                <h2>Inventário</h2>
+                <div class="weight-bar">
+                    <div class="weight-fill" id="weight-fill"></div>
+                    <span class="weight-text" id="weight-text">0 / 120 kg</span>
+                </div>
+            </div>
+            <div class="inv-grid" id="inv-grid"></div>
+        </div>
+
+        <!-- TOOLTIP -->
+        <div id="tooltip" class="tooltip" style="display:none;">
+            <div class="tooltip-name" id="tooltip-name"></div>
+            <div class="tooltip-desc" id="tooltip-desc"></div>
+            <div class="tooltip-weight" id="tooltip-weight"></div>
+            <div class="tooltip-actions">
+                <button class="tooltip-btn use-btn" id="btn-use">Usar</button>
+                <button class="tooltip-btn drop-btn" id="btn-drop">Largar</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
